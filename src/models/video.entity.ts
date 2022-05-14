@@ -1,12 +1,12 @@
 import {
   ManyToOne,
   OneToMany,
-  ManyToMany,
-  JoinTable,
   Entity,
   PrimaryGeneratedColumn,
   Column,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { VideoLikedByUser } from './videoLikedByUser.entity';
@@ -14,6 +14,11 @@ import { VideoLikedByUser } from './videoLikedByUser.entity';
 export class Video {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 
   @Column({ name: 'source_url', nullable: false })
   sourceUrl: string;
@@ -27,9 +32,14 @@ export class Video {
   @Column({ name: 'is_published', nullable: false, default: 0 })
   isPublished: boolean;
 
-  @ManyToOne(() => User, (user) => user.videos, { nullable: false })
+  @Column({ nullable: false, name: 'user_owner_id' })
+  userOwnerId: number;
+  @ManyToOne(() => User, (user) => user.videos, {
+    nullable: false,
+    eager: true,
+  })
   @JoinColumn({ name: 'user_owner_id' })
-  userOwnerId: User;
+  owner: User;
 
   @OneToMany(() => VideoLikedByUser, (videoLiked) => videoLiked.video)
   likedByUsers: VideoLikedByUser[];

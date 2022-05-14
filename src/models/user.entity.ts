@@ -5,6 +5,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
   BaseEntity,
 } from 'typeorm';
 import { UserFollower } from './userFollower.entity';
@@ -13,6 +15,11 @@ import { Video } from './video.entity';
 import { VideoLikedByUser } from './videoLikedByUser.entity';
 @Entity('Users')
 export class User extends BaseEntity {
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
   @PrimaryGeneratedColumn()
   id: number;
 
