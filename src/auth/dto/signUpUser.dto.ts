@@ -1,5 +1,4 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
-import { Role } from 'src/models/role.entity';
 export class SignUpUserDto {
   @IsNotEmpty({
     message: 'Email cannot be empty',
@@ -11,7 +10,7 @@ export class SignUpUserDto {
   @IsNumber({
     allowNaN: false,
   })
-  roleId: Role;
+  roleId: number;
   @IsNotEmpty({ message: 'Password cannot be empty' })
   password: string;
   @IsNotEmpty({ message: 'Name cannot be empty' })
