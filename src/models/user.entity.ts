@@ -5,13 +5,14 @@ import {
   PrimaryGeneratedColumn,
   Column,
   JoinColumn,
+  BaseEntity,
 } from 'typeorm';
 import { UserFollower } from './userFollower.entity';
 import { Role } from './role.entity';
 import { Video } from './video.entity';
 import { VideoLikedByUser } from './videoLikedByUser.entity';
 @Entity('Users')
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -32,9 +33,12 @@ export class User {
   })
   email: string;
 
-  @ManyToOne(() => Role, (role) => role.users, { nullable: false })
+  @Column({ nullable: false, name: 'role_id' })
+  roleId: number;
+
+  @ManyToOne(() => Role, (role) => role.users, { nullable: false, eager: true })
   @JoinColumn({ name: 'role_id' })
-  roleId: Role;
+  role: Role;
 
   @OneToMany(() => Video, (video) => video.userOwnerId)
   videos: Video[];
