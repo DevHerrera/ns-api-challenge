@@ -1,12 +1,10 @@
 import {
   ManyToOne,
-  ManyToMany,
   OneToMany,
   Entity,
   PrimaryGeneratedColumn,
   Column,
   JoinColumn,
-  JoinTable,
 } from 'typeorm';
 import { UserFollower } from './userFollower.entity';
 import { Role } from './role.entity';
