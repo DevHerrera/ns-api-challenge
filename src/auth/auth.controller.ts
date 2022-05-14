@@ -12,15 +12,15 @@ import {
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signUpUser.dto';
+import { SignInUserDto } from './dto/signInUser.dto';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('test')
   @HttpCode(200)
-  test() {
-    return this.authService.test();
-  }
+  test() {}
+
   @Post('sign-up')
   @HttpCode(201)
   signUp(@Body() userData: SignUpUserDto) {
@@ -28,10 +28,7 @@ export class AuthController {
   }
 
   @Post('sign-in')
-  signIn(@Res() response: Response): object {
-    return response.status(HttpStatus.OK).json({
-      msg: 'testing',
-      hello: 'hi',
-    });
+  signIn(@Body() userData: SignInUserDto): object {
+    return this.authService.signIn(userData);
   }
 }
