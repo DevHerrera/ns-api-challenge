@@ -1,17 +1,20 @@
-import { EntityNotFoundError } from 'typeorm';
+import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 import {
   ExceptionFilter,
+  UnauthorizedException,
   Catch,
   ArgumentsHost,
+  NotFoundException,
   HttpException,
   Logger,
   HttpStatus,
+  ForbiddenException,
+  ConflictException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { QueryFailedError } from 'typeorm';
 import { GlobalResponseError } from './global.response.error';
 @Catch()
-export class TypeOrmFailedQueryExceptionFilter implements ExceptionFilter {
+export class ErrorExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -28,16 +31,38 @@ export class TypeOrmFailedQueryExceptionFilter implements ExceptionFilter {
       case HttpException:
         status = (exception as HttpException).getStatus();
         break;
+      case UnauthorizedException:
+        status = HttpStatus.UNAUTHORIZED;
+        message = (exception as QueryFailedError).message;
+        code = (exception as any).code;
+        break;
+
       case QueryFailedError:
         status = HttpStatus.UNPROCESSABLE_ENTITY;
         message = (exception as QueryFailedError).message;
         code = (exception as any).code;
         break;
-      case EntityNotFoundError:
-        status = HttpStatus.UNPROCESSABLE_ENTITY;
+      case NotFoundException:
+        status = HttpStatus.NOT_FOUND;
         message = (exception as EntityNotFoundError).message;
         code = (exception as any).code;
         break;
+      case EntityNotFoundError:
+        status = HttpStatus.NOT_FOUND;
+        message = (exception as EntityNotFoundError).message;
+        code = (exception as any).code;
+        break;
+      case ForbiddenException:
+        status = HttpStatus.FORBIDDEN;
+        message = (exception as EntityNotFoundError).message;
+        code = (exception as any).code;
+        break;
+      case ConflictException:
+        status = HttpStatus.CONFLICT;
+        message = (exception as EntityNotFoundError).message;
+        code = (exception as any).code;
+        break;
+
       default:
     }
     response
