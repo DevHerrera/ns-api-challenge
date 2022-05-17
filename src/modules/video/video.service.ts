@@ -5,12 +5,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { VideosRepository } from 'src/repositories/video.repository';
-import { Video } from 'src/models/video.entity';
+import { VideosRepository } from 'src/modules/video/repositories/video.repository';
+import { Video } from './entities/video.entity';
 import { CreateVideoDto } from './dto/createVideo.dto';
 import { EditVideoDto } from './dto/editVideo.dto';
-import { VideoLikedByUser } from 'src/models/videoLikedByUser.entity';
-import { VideosLikedByUserRepository } from 'src/repositories/videoLikedByUser.repository';
+import { VideoLikedByUser } from './entities/videoLikedByUser.entity';
+import { VideosLikedByUserRepository } from 'src/modules/video/repositories/videoLikedByUser.repository';
 
 @Injectable()
 export class VideoService {
@@ -57,7 +57,7 @@ export class VideoService {
    * @return {[Video]} [Response with Video object]
    */
 
-  private async videoPublisherHelper(
+  public async videoPublisherHelper(
     videoId: number,
     userOwnerId: number,
     isPublished: boolean,
@@ -73,7 +73,6 @@ export class VideoService {
         `Video not found or you don't have permission to update it`,
       );
     }
-    console.log('What is coming? ', isPublished);
     await this.videoRepository
       .createQueryBuilder('v')
       .update({
@@ -271,6 +270,10 @@ export class VideoService {
     videoId: number,
     userId: number,
   ): Promise<VideoLikedByUser> {
+    const video = await this.videoRepository.findOne(videoId);
+    if (!video) {
+      throw new NotFoundException('Video not found');
+    }
     const likeVideo = await this.videosLikedByUserRepository.save({
       userId: userId,
       videoId: videoId,

@@ -18,6 +18,7 @@ import { VideoService } from './video.service';
 
 import { CreateVideoDto } from './dto/createVideo.dto';
 import { EditVideoDto } from './dto/editVideo.dto';
+import { PublishmentVideoDto } from './dto/publishmentVideo.dto';
 
 @UseGuards(JwtGuard)
 @Controller('videos')
@@ -33,6 +34,25 @@ export class VideoController {
   @HttpCode(201)
   storeVideo(@Body() videoData: CreateVideoDto, @GetUser('id') userId: number) {
     return this.videoService.createVideo(videoData, userId);
+  }
+
+  /**
+   * [Video publishment manager]
+   * @route PATCH[/videos/:videoId/publishment]
+   */
+
+  @Patch(':videoId/publishment')
+  @HttpCode(200)
+  publishmentVideoManagerByVideoId(
+    @Param('videoId') videoId: number,
+    @GetUser('id') userId: number,
+    @Body() data: PublishmentVideoDto,
+  ) {
+    return this.videoService.videoPublisherHelper(
+      videoId,
+      userId,
+      data.isPublished,
+    );
   }
 
   /**
