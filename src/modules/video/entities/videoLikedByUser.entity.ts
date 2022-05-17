@@ -6,7 +6,7 @@ import {
   Entity,
   ManyToOne,
 } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../../auth/entities/user.entity';
 import { Video } from './video.entity';
 
 @Entity('Videos_Liked_By_Users')

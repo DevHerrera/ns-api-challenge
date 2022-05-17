@@ -1,3 +1,5 @@
+import { User } from 'src/modules/auth/entities/user.entity';
+import { VideoLikedByUser } from './videoLikedByUser.entity';
 import {
   ManyToOne,
   OneToMany,
@@ -8,8 +10,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from './user.entity';
-import { VideoLikedByUser } from './videoLikedByUser.entity';
 @Entity('Videos')
 export class Video {
   @PrimaryGeneratedColumn()

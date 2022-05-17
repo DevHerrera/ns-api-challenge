@@ -1,3 +1,4 @@
+import { User } from 'src/modules/auth/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -6,8 +7,6 @@ import {
   Entity,
   ManyToOne,
 } from 'typeorm';
-import { User } from './user.entity';
-
 @Entity('User_Followers')
 export class UserFollower {
   @CreateDateColumn({ name: 'created_at' })

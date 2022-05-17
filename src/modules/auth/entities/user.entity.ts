@@ -9,10 +9,10 @@ import {
   UpdateDateColumn,
   BaseEntity,
 } from 'typeorm';
-import { UserFollower } from './userFollower.entity';
+import { UserFollower } from 'src/modules/user/entities/userFollower.entity';
 import { Role } from './role.entity';
-import { Video } from './video.entity';
-import { VideoLikedByUser } from './videoLikedByUser.entity';
+import { Video } from 'src/modules/video/entities/video.entity';
+import { VideoLikedByUser } from '../../video/entities/videoLikedByUser.entity';
 @Entity('Users')
 export class User extends BaseEntity {
   @CreateDateColumn({ name: 'created_at' })
