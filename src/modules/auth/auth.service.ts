@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { User } from 'src/models/user.entity';
-import { UsersRepository } from 'src/repositories/users.repository';
+import { User } from './entities/user.entity';
+import { UsersRepository } from 'src/modules/auth/repositories/users.repository';
 
 import { SignUpUserDto } from './dto/signUpUser.dto';
 import { SignInUserDto } from './dto/signInUser.dto';
@@ -47,7 +47,6 @@ export class AuthService {
     // Let's encrypt the password
     const hash = await argon.hash(userData.password);
     userData.password = hash;
-
     user = await this.userRepository.save(userData);
     delete user.password;
     return {
