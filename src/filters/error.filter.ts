@@ -10,6 +10,7 @@ import {
   HttpStatus,
   ForbiddenException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { GlobalResponseError } from './global.response.error';
@@ -33,10 +34,14 @@ export class ErrorExceptionFilter implements ExceptionFilter {
         break;
       case UnauthorizedException:
         status = HttpStatus.UNAUTHORIZED;
-        message = (exception as QueryFailedError).message;
+        message = (exception as UnauthorizedException).message;
         code = (exception as any).code;
         break;
-
+      case BadRequestException:
+        status = HttpStatus.BAD_REQUEST;
+        message = (exception as BadRequestException).message;
+        code = (exception as any).code;
+        break;
       case QueryFailedError:
         status = HttpStatus.UNPROCESSABLE_ENTITY;
         message = (exception as QueryFailedError).message;
@@ -44,7 +49,7 @@ export class ErrorExceptionFilter implements ExceptionFilter {
         break;
       case NotFoundException:
         status = HttpStatus.NOT_FOUND;
-        message = (exception as EntityNotFoundError).message;
+        message = (exception as NotFoundException).message;
         code = (exception as any).code;
         break;
       case EntityNotFoundError:
@@ -54,12 +59,12 @@ export class ErrorExceptionFilter implements ExceptionFilter {
         break;
       case ForbiddenException:
         status = HttpStatus.FORBIDDEN;
-        message = (exception as EntityNotFoundError).message;
+        message = (exception as ForbiddenException).message;
         code = (exception as any).code;
         break;
       case ConflictException:
         status = HttpStatus.CONFLICT;
-        message = (exception as EntityNotFoundError).message;
+        message = (exception as ConflictException).message;
         code = (exception as any).code;
         break;
 
