@@ -7,11 +7,21 @@ export class NotificationService {
   constructor(
     @InjectRepository(UsersRepository) private userRepository: UsersRepository,
   ) {}
+
+  /**
+   * Notification to be dispatch after a user follows or unfollows
+   * a user creator
+   * @param followerUserId - Follower user id (current user)
+   * @param creatorUserId - Creator follower id
+   * @param follow - Follow flag, true or false
+   * @return {[void]} []
+   */
+
   public async followCreatorManagerNotification(
     followerUserId: number,
     creatorUserId: number,
     follow: boolean,
-  ) {
+  ): Promise<void> {
     const followerUser = await this.userRepository.findOne(followerUserId, {
       select: ['name'],
       loadEagerRelations: false,
