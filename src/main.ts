@@ -1,7 +1,8 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ErrorExceptionFilter } from './filters/error.filter';
+import { SwaggerModule } from '@nestjs/swagger';
+import { SwaggerConfig } from './config/swagger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,11 +13,10 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  //  app.enableCors({
-  //    origin: true,
-  //    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  //  });
-  //  app.useGlobalFilters(new ErrorExceptionFilter());
-  await app.listen(5000);
+  const swaggerDocument = SwaggerModule.createDocument(app, SwaggerConfig);
+  SwaggerModule.setup('docs', app, swaggerDocument, {
+    swaggerOptions: { defaultModelsExpandDepth: -1 },
+  });
+  await app.listen(3000);
 }
 bootstrap();
