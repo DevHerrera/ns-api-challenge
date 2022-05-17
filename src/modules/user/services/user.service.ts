@@ -83,6 +83,55 @@ export class UserService {
   }
 
   /**
+   * Get account information
+   * @param userId - User follower id (current user)
+   * @return {[json]} [Returns json object with the account's information]
+   */
+
+  public async getAccountInformation(userId: number): Promise<{
+    userInformation: User;
+    videosInformation: {
+      videos: Video[];
+      totalVideos: number;
+    };
+    generalInformation: {
+      totalLikes: number;
+      totalFollowers: number;
+    };
+  }> {
+    const user = await this.userRepository.findOne(userId);
+    delete user.password;
+    const videos = await this.videoRepository.findAndCount({
+      where: {
+        userOwnerId: userId,
+      },
+      loadEagerRelations: false,
+    });
+    const followers = await this.userFollowerRepository.count({
+      where: {
+        userCreatorId: userId,
+      },
+    });
+    const likes = await this.videosLikedByUserRepository
+      .createQueryBuilder('likedVideos')
+      .innerJoinAndSelect(Video, 'video', 'video.id = likedVideos.videoId')
+      .where('video.userOwnerId = :userId', { userId })
+      .getCount();
+    const payload = {
+      userInformation: user,
+      videosInformation: {
+        videos: videos[0],
+        totalVideos: videos[1],
+      },
+      generalInformation: {
+        totalFollowers: followers,
+        totalLikes: likes,
+      },
+    };
+    return payload;
+  }
+
+  /**
    * Follow user creator
    * @param creatorId - User creator id
    * @param userId - User follower id (current user)
