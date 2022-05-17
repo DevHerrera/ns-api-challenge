@@ -5,8 +5,18 @@ import { ErrorExceptionFilter } from './filters/error.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.enableCors();
+  app.useGlobalPipes(
+    new ValidationPipe({
+      forbidNonWhitelisted: true,
+      whitelist: true,
+    }),
+  );
+  //  app.enableCors({
+  //    origin: true,
+  //    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  //  });
   //  app.useGlobalFilters(new ErrorExceptionFilter());
-  await app.listen(3000);
+  await app.listen(5000);
 }
 bootstrap();
