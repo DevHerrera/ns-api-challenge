@@ -1,4 +1,4 @@
-import { User } from 'src/modules/auth/entities/user.entity';
+import { User } from '../../auth/entities/user.entity';
 import { VideoLikedByUser } from './videoLikedByUser.entity';
 import {
   ManyToOne,
