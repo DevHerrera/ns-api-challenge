@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { UserController } from './user.controller';
 import { UserService } from './services/user.service';
+import { NotificationService } from './services/notification.service';
 
 import { UserFollowerRepository } from 'src/modules/user/repositories/userFollower.repository';
 import { UsersRepository } from 'src/modules/auth/repositories/users.repository';
@@ -21,6 +22,6 @@ import { VideosLikedByUserRepository } from 'src/modules/video/repositories/vide
     ]),
     JwtModule.register({}),
   ],
-  providers: [UserService],
+  providers: [UserService, NotificationService],
 })
 export class UserModule {}

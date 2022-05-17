@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { NotificationService } from './notification.service';
+
 import { UserFollowerRepository } from 'src/modules/user/repositories/userFollower.repository';
 import { UsersRepository } from 'src/modules/auth/repositories/users.repository';
 import { VideosRepository } from 'src/modules/video/repositories/video.repository';
@@ -27,6 +29,7 @@ export class UserService {
     private userRepository: UsersRepository,
     @InjectRepository(UserFollowerRepository)
     private userFollowerRepository: UserFollowerRepository,
+    private notificationService: NotificationService,
   ) {}
 
   /**
@@ -50,7 +53,20 @@ export class UserService {
     if (userId == creatorId) {
       throw new ConflictException('You cannot follow yourself :(');
     }
-
+    const userFollower = await this.userFollowerRepository.find({
+      where: {
+        userCreatorId: creatorId,
+        userFollowerId: userId,
+      },
+    });
+    if (userFollower.length > 0 && follow) {
+      throw new ConflictException('You already follow this creator');
+    }
+    await this.notificationService.followCreatorManagerNotification(
+      userId,
+      creatorId,
+      follow,
+    );
     if (follow) {
       await this.userFollowerRepository.save({
         userCreatorId: creatorId,
