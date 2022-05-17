@@ -270,7 +270,9 @@ export class VideoService {
     videoId: number,
     userId: number,
   ): Promise<VideoLikedByUser> {
-    const video = await this.videoRepository.findOne(videoId);
+    const video = await this.videoRepository.findOne(videoId, {
+      where: { isPublished: true },
+    });
     if (!video) {
       throw new NotFoundException('Video not found');
     }
