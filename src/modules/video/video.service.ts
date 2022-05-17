@@ -7,11 +7,18 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { VideosRepository } from 'src/repositories/video.repository';
 import { Video } from 'src/models/video.entity';
+import { CreateVideoDto } from './dto/createVideo.dto';
+import { EditVideoDto } from './dto/editVideo.dto';
+import { VideoLikedByUser } from 'src/models/videoLikedByUser.entity';
+import { VideosLikedByUserRepository } from 'src/repositories/videoLikedByUser.repository';
+
 @Injectable()
 export class VideoService {
   constructor(
     @InjectRepository(VideosRepository)
     private videoRepository: VideosRepository,
+    @InjectRepository(VideosLikedByUserRepository)
+    private videosLikedByUserRepository: VideosLikedByUserRepository,
   ) {}
 
   /**
@@ -39,6 +46,128 @@ export class VideoService {
         sqlParams: { userId: filterData.userId, isPublished: null },
       };
     }
+  }
+
+  /**
+   * Helper fuction to manage video publishment
+   * Videos can be publised or unpublished by user owner
+   * @param videoId - Video id to be updated
+   * @param userOwnerId - User owner id
+   * @param isPublished - Publishment flag
+   * @return {[Video]} [Response with Video object]
+   */
+
+  private async videoPublisherHelper(
+    videoId: number,
+    userOwnerId: number,
+    isPublished: boolean,
+  ): Promise<Video> {
+    let video = await this.videoRepository.findOne({
+      where: {
+        userOwnerId: userOwnerId,
+        id: videoId,
+      },
+    });
+    if (!video) {
+      throw new NotFoundException(
+        `Video not found or you don't have permission to update it`,
+      );
+    }
+    console.log('What is coming? ', isPublished);
+    await this.videoRepository
+      .createQueryBuilder('v')
+      .update({
+        isPublished: isPublished,
+      })
+      .where({ id: videoId })
+      .execute();
+    video = await this.videoRepository.findOne(videoId, {
+      loadEagerRelations: false,
+    });
+    return video;
+  }
+
+  /**
+   * Updates video by id
+   * @param videoData - Video data from request
+   * @param userOwnerId - Current logged in user's id
+   * @return {[Video]} [Video object]
+   */
+
+  public async updateVideoById(
+    videoData: EditVideoDto,
+    userOwnerId: number,
+    videoId: number,
+  ): Promise<Video> {
+    let video = await this.videoRepository.findOne({
+      where: {
+        userOwnerId: userOwnerId,
+        id: videoId,
+      },
+    });
+    if (!video) {
+      throw new NotFoundException(
+        `Video not found or you don't have permission to update it`,
+      );
+    }
+    video = await this.videoRepository.save(
+      {
+        id: videoId,
+        ...videoData,
+      },
+      { reload: true },
+    );
+    // call select instruction again to get all fields
+    video = await this.videoRepository.findOne(videoId, {
+      loadEagerRelations: false,
+    });
+    return video;
+  }
+
+  /**
+   * Unpublishes video
+   * @param videoId - Video id to be published
+   * @param userOwnerId - Current logged in user's id
+   * @return {[Video]} [Video object]
+   */
+
+  public async unpublishVideoById(
+    videoId: number,
+    userOwnerId: number,
+  ): Promise<Video> {
+    return await this.videoPublisherHelper(videoId, userOwnerId, false);
+  }
+
+  /**
+   * Publishes video
+   * @param videoId - Video id to be published
+   * @param userOwnerId - Current logged in user's id
+   * @return {[Video]} [Video object]
+   */
+
+  public async publishVideoById(
+    videoId: number,
+    userOwnerId: number,
+  ): Promise<Video> {
+    return await this.videoPublisherHelper(videoId, userOwnerId, true);
+  }
+
+  /**
+   * Stores video into database
+   * @param videoData - Video data from request
+   * @param userOwnerId - Current logged in user's id
+   * @return {[Video]} [Video object]
+   */
+
+  public async createVideo(
+    videoData: CreateVideoDto,
+    userOwnerId: number,
+  ): Promise<Video> {
+    const video = await this.videoRepository.save({
+      ...videoData,
+      userOwnerId: userOwnerId,
+    });
+    return video;
   }
 
   /**
@@ -130,5 +259,22 @@ export class VideoService {
       throw new NotFoundException('Video not found');
     }
     return video;
+  }
+
+  /**
+   * Likes a video from database
+   * @param videoId - Video id to find
+   * @param userId - Current logged in user's id
+   * @return {[json]} [Response json objet]
+   */
+  public async likeVideoById(
+    videoId: number,
+    userId: number,
+  ): Promise<VideoLikedByUser> {
+    const likeVideo = await this.videosLikedByUserRepository.save({
+      userId: userId,
+      videoId: videoId,
+    });
+    return likeVideo;
   }
 }
