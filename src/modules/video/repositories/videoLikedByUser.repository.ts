@@ -1,4 +1,4 @@
 import { Repository, EntityRepository } from 'typeorm';
-import { VideoLikedByUser } from 'src/models/videoLikedByUser.entity';
+import { VideoLikedByUser } from '../entities/videoLikedByUser.entity';
 @EntityRepository(VideoLikedByUser)
 export class VideosLikedByUserRepository extends Repository<VideoLikedByUser> {}
