@@ -1,4 +1,4 @@
-import { IsOptional, IsUrl } from 'class-validator';
+import { IsOptional, IsUrl} from 'class-validator';
 export class EditVideoDto {
   @IsOptional()
   @IsUrl({
