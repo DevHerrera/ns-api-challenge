@@ -24,6 +24,17 @@ import { UserService } from './services/user.service';
 export class UserController {
   constructor(private userService: UserService) {}
 
+  @Get('liked-videos')
+  public async getLikedVideos(
+    @Query('take') take: number,
+    @Query('skip') skip: number,
+    @GetUser('id') userId: number,
+  ) {
+    return this.userService.getLikedVideos(userId, {
+      skip,
+      take,
+    });
+  }
   @Post('creators/follow-management/:creatorId')
   public async followCreatorManager(
     @Param('creatorId') creatorId: number,

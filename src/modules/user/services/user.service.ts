@@ -31,6 +31,56 @@ export class UserService {
     private userFollowerRepository: UserFollowerRepository,
     private notificationService: NotificationService,
   ) {}
+  /**
+   * Follow user creator
+   * @param userId - User follower id (current user)
+   * @param queryParams - Query params to paginate
+   * @return {[UserFollower]} [Returns UserFollower object]
+   */
+  public async getLikedVideos(
+    userId: number,
+    queryParams: { skip: number; take: number },
+  ): Promise<{
+    videos: Video[];
+    totalItems: number;
+  }> {
+    // Check for pagination variables
+    const skip = queryParams.skip || 0;
+    const take = queryParams.take || 10;
+    const query = await this.videoRepository
+      .createQueryBuilder('v')
+      .innerJoinAndSelect('v.owner', 'owner')
+      .innerJoinAndSelect(
+        VideoLikedByUser,
+        'likedVideos',
+        `likedVideos.videoId = v.id and likedVideos.userId = ${userId}`,
+      )
+      .select([
+        'v.id',
+        'v.description',
+        'v.isPublished',
+        'v.sourceUrl',
+        'v.title',
+        'owner.name',
+        'owner.email',
+        'likedVideos.createdAt',
+      ])
+      .skip(skip)
+      .take(take)
+      .where('v.isPublished = :isPublished ', { isPublished: true })
+      .getManyAndCount();
+
+    const videos = query[0];
+    const totalItems = query[1];
+    if (!(totalItems > 0)) {
+      throw new NotFoundException('No videos found');
+    }
+    const payload = {
+      videos: videos,
+      totalItems,
+    };
+    return payload;
+  }
 
   /**
    * Follow user creator
