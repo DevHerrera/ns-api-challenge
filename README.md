@@ -111,6 +111,10 @@ Test could not be implemented in the estimated time, I'll add them soon anyways.
 # unit tests
 ```
 
+## Notes
+
+Password for genereted users is 'hahaha'.
+
 ## Stay in touch
 
 - Author - [Julio Herrera](https://www.linkedin.com/in/devherrera/)
