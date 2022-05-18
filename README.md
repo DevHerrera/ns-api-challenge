@@ -6,7 +6,7 @@
 
 ## Description
 
-[Video Creator Platform](https://github.com/nestjs/nest) is a project about uploading, consuming, editing and publishing videos through User's account
+[Video Creator Platform](https://ns-deployment.herokuapp.com/docs/) is a project about uploading, consuming, editing and publishing videos through User's account
 
 You can visualize and get an idea of the project by looking at this database diagram ![Database Diagram](https://i.postimg.cc/2yf1pX6V/Nica-Source-challenge-drawio-3.png)
 
