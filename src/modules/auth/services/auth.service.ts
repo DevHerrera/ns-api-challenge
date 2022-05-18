@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from '../entities/user.entity';
-import { UsersRepository } from 'src/modules/auth/repositories/users.repository';
+import { UsersRepository } from '../repositories/users.repository';
 
 import { SignUpUserDto } from '../dto/signUpUser.dto';
 import { SignInUserDto } from '../dto/signInUser.dto';
