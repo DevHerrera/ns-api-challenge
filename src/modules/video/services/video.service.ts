@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VideosRepository } from 'src/modules/video/repositories/video.repository';
-import { Video } from './entities/video.entity';
-import { CreateVideoDto } from './dto/createVideo.dto';
-import { EditVideoDto } from './dto/editVideo.dto';
-import { VideoLikedByUser } from './entities/videoLikedByUser.entity';
+import { Video } from '../entities/video.entity';
+import { CreateVideoDto } from '../dto/createVideo.dto';
+import { EditVideoDto } from '../dto/editVideo.dto';
+import { VideoLikedByUser } from '../entities/videoLikedByUser.entity';
 import { VideosLikedByUserRepository } from 'src/modules/video/repositories/videoLikedByUser.repository';
 
 @Injectable()

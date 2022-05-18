@@ -20,13 +20,13 @@ import {
   Patch,
 } from '@nestjs/common';
 
-import { JwtGuard } from '../auth/guard';
-import { GetUser } from '../auth/decorators';
-import { VideoService } from './video.service';
+import { JwtGuard } from '../../auth/guard';
+import { GetUser } from '../../auth/decorators';
+import { VideoService } from '../services/video.service';
 
-import { CreateVideoDto } from './dto/createVideo.dto';
-import { EditVideoDto } from './dto/editVideo.dto';
-import { PublishmentVideoDto } from './dto/publishmentVideo.dto';
+import { CreateVideoDto } from '../dto/createVideo.dto';
+import { EditVideoDto } from '../dto/editVideo.dto';
+import { PublishmentVideoDto } from '../dto/publishmentVideo.dto';
 
 @ApiTags('Videos')
 @UseGuards(JwtGuard)

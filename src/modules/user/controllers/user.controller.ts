@@ -18,12 +18,12 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 
-import { JwtGuard } from '../auth/guard';
+import { JwtGuard } from '../../auth/guard';
 
-import { FollowCreatorManagerDto } from './dto/followCreatorManager.dto';
+import { FollowCreatorManagerDto } from '../dto/followCreatorManager.dto';
 
-import { GetUser } from '../auth/decorators';
-import { UserService } from './services/user.service';
+import { GetUser } from '../../auth/decorators';
+import { UserService } from '../services/user.service';
 
 @ApiTags('Account')
 @ApiBearerAuth('jwt')
