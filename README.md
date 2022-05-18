@@ -69,6 +69,7 @@ echo "\l" | docker exec -i $SERVER psql -U postgres
 Create a .env file with the following data
 
 ```bash
+MODE = DEV
 POSTGRES_PASSWORD = mysecrectpassword
 POSTGRES_DATABASE = video_creators
 POSTGRES_USER = postgres
