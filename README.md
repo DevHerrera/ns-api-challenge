@@ -1,35 +1,93 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+  <a href="https://nicasource.com/" target="blank"><img src="https://media-exp1.licdn.com/dms/image/C561BAQG2_kywxM9I3A/company-background_10000/0/1619825388099?e=1653447600&v=beta&t=Tv8R2gp9uxi05FWSMJrQqRwT6L4FpNTzJ-usRPQ_9UI" width="600" alt="NicaSource Background" /></a>
 </p>
+  <p align="center">A backend assestment by <a href="https://nicasource.com/" target="_blank">NicaSource</a> company for the mid-senior node.js backend developer.</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Video Creator Platform](https://github.com/nestjs/nest) is a project about uploading, consuming, editing and publishing videos through User's account
+
+You can visualize and get an idea of the project by looking at this database diagram ![Database Diagram](https://i.postimg.cc/2yf1pX6V/Nica-Source-challenge-drawio-3.png)
 
 ## Installation
 
 ```bash
 $ npm install
+```
+
+## Before running the app
+
+```bash
+# Docker container needs to be up
+
+# You can init the docker container ethier with docker compose
+
+version: '2.5.0'
+services:
+  dev-db:
+    image: postgres:13
+    network_mode: host
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: video_creators
+    networks:
+      - default
+networks:
+  default:
+
+# Or with the following bash script (make sure to grant privileges to be able to run it):
+
+#!/bin/bash
+set -e
+
+SERVER="my_database_server";
+PW="mysecretpassword";
+DB="video_creators";
+
+echo "echo stop & remove old docker [$SERVER] and starting new fresh instance of [$SERVER]"
+(docker kill $SERVER || :) && \
+  (docker rm $SERVER || :) && \
+  docker run --network="host" --name $SERVER -e POSTGRES_PASSWORD=$PW \
+  -e PGPASSWORD=$PW \
+  -p 5432:5432 \
+  -d postgres
+
+# wait for pg to start
+echo "sleep wait for pg-server [$SERVER] to start";
+sleep 3;
+
+# create the db
+echo "CREATE DATABASE $DB ENCODING 'UTF-8';" | docker exec -i $SERVER psql -U postgres
+echo "\l" | docker exec -i $SERVER psql -U postgres
+```
+
+## Configuring local environment
+
+Create a .env file with the following data
+
+```bash
+POSTGRES_PASSWORD = mysecrectpassword
+POSTGRES_DATABASE = video_creators
+POSTGRES_USER = postgres
+POSTGRES_PORT = 5432
+POSTGRES_HOST = localhost
+JWT_SECRET= 'supersecret'
+```
+
+Run TypeORM migrations
+
+```bash
+$ npm run migration:run
+```
+
+Run database seeder
+
+```bash
+$ npm run seed:run
 ```
 
 ## Running the app
@@ -50,24 +108,10 @@ $ npm run start:prod
 ```bash
 # unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- Author - [Julio Herrera](https://www.linkedin.com/in/devherrera/)
+- Email - cesarchavarria0@gmail.com
+- Phone - (+505) 8714-2729
