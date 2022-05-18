@@ -56,7 +56,7 @@ class DatabaseConfigService {
       },
       logging: true,
       migrationsTableName: 'migrations',
-      ssl: this.isProduction(),
+      ssl: true,
     };
   }
 }
