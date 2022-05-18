@@ -3,7 +3,6 @@
 </p>
   <p align="center">A backend assestment by <a href="https://nicasource.com/" target="_blank">NicaSource</a> company for the mid-senior node.js backend developer.</p>
 
-
 ## Description
 
 [Video Creator Platform](https://ns-deployment.herokuapp.com/docs/) is a project about uploading, consuming, editing and publishing videos through User's account
@@ -105,9 +104,10 @@ $ npm run start:prod
 
 ## Test
 
+Test could not be implemented in the estimated time, I'll add them soon anyways.
+
 ```bash
 # unit tests
-$ npm run test
 ```
 
 ## Stay in touch
