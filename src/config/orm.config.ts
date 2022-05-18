@@ -1,8 +1,9 @@
+require('dotenv').config();
+
 const getSetting = (settingName: string): string => {
   return process.env[settingName];
 };
 
-require('dotenv').config();
 export default {
   type: 'postgres',
   synchronize: false,
