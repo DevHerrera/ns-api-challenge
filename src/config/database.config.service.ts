@@ -57,6 +57,11 @@ class DatabaseConfigService {
       logging: true,
       migrationsTableName: 'migrations',
       ssl: true,
+      extra: {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      },
     };
   }
 }
