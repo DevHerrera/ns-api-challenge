@@ -17,6 +17,6 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, swaggerDocument, {
     swaggerOptions: { defaultModelsExpandDepth: -1 },
   });
-  await app.listen(3000);
+  await app.listen(parseInt(process.env.PORT) || 3000);
 }
 bootstrap();
